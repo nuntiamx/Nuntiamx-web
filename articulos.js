@@ -42,7 +42,7 @@ const ARTICULOS = [
     titulo: "Jennifer Parker vuelve al mall donde nació 'Volver al Futuro'",
     categoria: "Cultura pop",
     icono: "🚗",
-    imagen: "img/claudia-wells-twin-pines.jpg",
+    imagen: "img/IMG_5178.jpeg",
     fecha: "2026-08-22",
     resumen: "Claudia Wells confirmó su presencia en el encuentro de fans en Puente Hills Mall — la locación real de la película, que podría desaparecer pronto.",
     contenido: [
