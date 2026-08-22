@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NuntiaMX — Actualidad y tendencias digitales</title>
+<meta name="description" content="NuntiaMX: lo que pasa hoy, en segundos. Actualidad, tendencias, entretenimiento y viral en un minuto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#070c24;
+    --navy:#0e1a4a;
+    --navy-mid:#16308f;
+    --teal:#17c9b8;
+    --teal-light:#5eead4;
+    --ice:#eef4fb;
+    --ice-dim:#a9b6d6;
+    --line:rgba(238,244,251,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy-deep);
+    color:var(--ice);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand,.eyebrow{font-family:'Sora', sans-serif;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ::selection{background:var(--teal); color:var(--navy-deep);}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--teal-light);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px clamp(20px,5vw,56px);
+    background:linear-gradient(180deg, rgba(7,12,36,0.92), rgba(7,12,36,0.55));
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand-mark{display:flex; align-items:center; gap:10px;}
+  .brand-mark svg{width:30px; height:30px;}
+  .brand{font-weight:800; font-size:1.15rem; letter-spacing:0.01em;}
+  .brand span{color:var(--teal-light);}
+
+  .menu-btn{
+    display:flex; flex-direction:column; gap:5px; justify-content:center;
+    width:42px; height:42px; background:none; border:1px solid var(--line);
+    border-radius:10px; cursor:pointer; align-items:center;
+  }
+  .menu-btn span{width:18px; height:2px; background:var(--ice); display:block; transition:transform .3s ease, opacity .3s ease;}
+  .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .menu-btn.open span:nth-child(2){opacity:0;}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* ---------- Left drawer nav ---------- */
+  .scrim{
+    position:fixed; inset:0; background:rgba(4,7,20,0.6);
+    opacity:0; pointer-events:none; transition:opacity .35s ease; z-index:55;
+  }
+  .scrim.show{opacity:1; pointer-events:auto;}
+
+  .drawer{
+    position:fixed; top:0; left:0; bottom:0; width:min(300px, 82vw);
+    background:linear-gradient(180deg,#0a1338,#070c24);
+    border-right:1px solid var(--line);
+    transform:translateX(-105%);
+    transition:transform .4s cubic-bezier(.16,.84,.44,1);
+    z-index:60;
+    padding:26px 22px;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:34px;}
+  .drawer-close{background:none; border:none; color:var(--ice); font-size:1.4rem; cursor:pointer; line-height:1;}
+  .drawer nav{display:flex; flex-direction:column; gap:2px;}
+  .drawer nav a{
+    padding:13px 10px; font-size:1.02rem; font-weight:600; color:var(--ice-dim);
+    border-left:2px solid transparent; transition:color .2s ease, border-color .2s ease, padding-left .2s ease;
+  }
+  .drawer nav a:hover{color:var(--ice); border-color:var(--teal); padding-left:16px;}
+  .drawer-foot{margin-top:auto; padding-top:24px; border-top:1px solid var(--line);}
+  .drawer-foot p{font-size:.78rem; color:var(--ice-dim); margin-bottom:12px; letter-spacing:.04em; text-transform:uppercase;}
+  .drawer-social{display:flex; gap:12px;}
+  .drawer-social a{
+    width:38px; height:38px; border-radius:10px; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--ice);
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .drawer-social a:hover{background:var(--teal); border-color:var(--teal); color:var(--navy-deep); transform:translateY(-2px);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:150px clamp(20px,6vw,72px) 90px;
+    overflow:hidden;
+  }
+  .hero-grid{position:absolute; inset:0; opacity:.35;
+    background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, black 10%, transparent 75%);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; width:fit-content;
+    font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+    color:var(--teal-light); border:1px solid rgba(94,234,212,.3); background:rgba(23,201,184,.08);
+    padding:8px 14px; border-radius:99px; margin-bottom:26px; position:relative; z-index:2;
+  }
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--teal-light); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.4; transform:scale(1.4);}}
+
+  .hero h1{
+    position:relative; z-index:2;
+    font-size:clamp(2.4rem, 6.4vw, 5.1rem); font-weight:800; line-height:1.03; letter-spacing:-0.01em;
+    max-width:16ch;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(100deg, var(--teal-light), var(--teal) 60%, var(--navy-mid));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lead{
+    position:relative; z-index:2;
+    max-width:46ch; font-size:clamp(1rem,1.6vw,1.2rem); color:var(--ice-dim); margin-top:22px; line-height:1.6;
+  }
+  .hero-actions{position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;}
+  .btn{
+    padding:15px 26px; border-radius:12px; font-weight:700; font-size:.95rem; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary{background:linear-gradient(100deg, var(--teal-light), var(--teal)); color:#06231f; border:none;}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 28px rgba(23,201,184,.28);}
+  .btn-ghost{background:transparent; border:1px solid var(--line); color:var(--ice);}
+  .btn-ghost:hover{border-color:var(--teal-light); transform:translateY(-2px);}
+
+  /* signature trend line */
+  .trendwrap{position:absolute; right:clamp(-40px,-2vw,40px); bottom:0; top:0; width:min(52vw, 640px); z-index:1; pointer-events:none;}
+  .trendwrap svg{width:100%; height:100%;}
+  .trend-path{
+    fill:none; stroke:url(#trendGrad); stroke-width:5; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:1400; stroke-dashoffset:1400;
+    animation:draw 2.6s cubic-bezier(.2,.7,.2,1) .3s forwards;
+    filter:drop-shadow(0 0 18px rgba(23,201,184,.35));
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .trend-tip{
+    opacity:0; animation:tipshow .4s ease 2.6s forwards;
+  }
+  @keyframes tipshow{to{opacity:1;}}
+  .trend-tip circle{animation:pulse 1.8s ease-in-out 3s infinite;}
+
+  /* ---------- Sections shared ---------- */
+  section{padding:100px clamp(20px,6vw,72px);}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head .tag{font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--teal-light);}
+  .section-head h2{font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:800; margin-top:12px; line-height:1.15;}
+  .section-head p{color:var(--ice-dim); margin-top:14px; font-size:1.02rem; line-height:1.6;}
+
+  /* categories */
+  .cat-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:18px;}
+  .cat-card{
+    border:1px solid var(--line); border-radius:16px; padding:26px 22px;
+    background:linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+    transition:border-color .25s ease, transform .25s ease, background .25s ease;
+  }
+  .cat-card:hover{border-color:rgba(94,234,212,.4); transform:translateY(-4px); background:linear-gradient(160deg, rgba(23,201,184,0.08), rgba(255,255,255,0));}
+  .cat-card .num{font-family:'Sora',sans-serif; font-size:.78rem; color:var(--teal-light); font-weight:700; letter-spacing:.06em;}
+  .cat-card h3{font-size:1.15rem; font-weight:700; margin-top:14px;}
+  .cat-card p{font-size:.9rem; color:var(--ice-dim); margin-top:8px; line-height:1.55;}
+
+  /* social */
+  .social-strip{
+    background:linear-gradient(135deg, var(--navy-mid), var(--navy) 55%, var(--navy-deep));
+    border-radius:24px; border:1px solid var(--line);
+    padding:56px clamp(22px,4vw,56px);
+    position:relative; overflow:hidden;
+  }
+  .social-strip::before{
+    content:""; position:absolute; width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(23,201,184,.25), transparent 70%);
+    top:-160px; right:-120px;
+  }
+  .social-head{position:relative; z-index:2; max-width:520px; margin-bottom:40px;}
+  .social-head h2{font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800;}
+  .social-head p{color:var(--ice-dim); margin-top:12px;}
+  .social-grid{position:relative; z-index:2; display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px;}
+  .social-card{
+    display:flex; align-items:center; gap:14px; padding:18px 18px;
+    background:rgba(7,12,36,0.55); border:1px solid var(--line); border-radius:14px;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .social-card:hover{transform:translateY(-3px); border-color:var(--teal-light);}
+  .social-icon{width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(94,234,212,.12); color:var(--teal-light);}
+  .social-card .s-name{font-weight:700; font-size:.98rem;}
+  .social-card .s-sub{font-size:.8rem; color:var(--ice-dim); margin-top:2px;}
+
+  /* footer */
+  footer{
+    padding:40px clamp(20px,6vw,72px) 44px; border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;
+  }
+  footer .f-left{display:flex; align-items:center; gap:10px; color:var(--ice-dim); font-size:.85rem;}
+  footer .f-left svg{width:20px; height:20px;}
+  footer nav{display:flex; gap:22px; flex-wrap:wrap;}
+  footer nav a{color:var(--ice-dim); font-size:.85rem; transition:color .2s ease;}
+  footer nav a:hover{color:var(--teal-light);}
+
+  @media (max-width:640px){
+    section{padding:76px 20px;}
+    .hero{padding-top:130px;}
+    .trendwrap{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="brand-mark">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="markGrad" x1="0" y1="100" x2="100" y2="0">
+          <stop offset="0%" stop-color="#16308f"/>
+          <stop offset="55%" stop-color="#17c9b8"/>
+          <stop offset="100%" stop-color="#5eead4"/>
+        </linearGradient>
+      </defs>
+      <path d="M8 78 L30 40 L45 62 L62 30 L74 46 L92 14" stroke="url(#markGrad)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M92 14 L74 20 M92 14 L86 32" stroke="url(#markGrad)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span class="brand">Nuntia<span>MX</span></span>
+  </div>
+  <div style="width:42px;"></div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Menú principal">
+  <div class="drawer-top">
+    <span class="brand">Nuntia<span style="color:var(--teal-light)">MX</span></span>
+    <button class="drawer-close" id="drawerClose" aria-label="Cerrar menú">✕</button>
+  </div>
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#categorias">Categorías</a>
+    <a href="#hoy">Un minuto, hoy</a>
+    <a href="#redes">Síguenos</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <div class="drawer-foot">
+    <p>Encuéntranos en</p>
+    <div class="drawer-social">
+      <a href="#" aria-label="TikTok" title="TikTok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-4.28-4.28h-3.4v14.2a2.6 2.6 0 1 1-1.84-2.49v-3.44a5.99 5.99 0 1 0 5.24 5.94V9.4a7.65 7.65 0 0 0 4.28 1.3V7.3a4.27 4.27 0 0 1 0-1.48z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      </a>
+      <a href="#" aria-label="Facebook" title="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube" title="YouTube">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.4-.4-5a2.8 2.8 0 0 0-2-2C17.9 4.5 12 4.5 12 4.5s-5.9 0-7.6.5a2.8 2.8 0 0 0-2 2C2 8.6 2 12 2 12s0 3.4.4 5a2.8 2.8 0 0 0 2 2c1.7.5 7.6.5 7.6.5s5.9 0 7.6-.5a2.8 2.8 0 0 0 2-2c.4-1.6.4-5 .4-5zM10 15.5v-7l6 3.5-6 3.5z"/></svg>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="hero-grid" aria-hidden="true"></div>
+
+    <span class="eyebrow"><span class="dot"></span> En vivo · actualidad y tendencias digitales</span>
+    <h1>Lo que pasa hoy,<br><em>en segundos.</em></h1>
+    <p class="lead">Noticias, viral, tecnología y cultura pop explicados rápido, claro y directo — pensado para verse, comentarse y compartirse.</p>
+    <div class="hero-actions">
+      <a href="#redes" class="btn btn-primary">Síguenos hoy</a>
+      <a href="#categorias" class="btn btn-ghost">Ver categorías</a>
+    </div>
+
+    <div class="trendwrap" aria-hidden="true">
+      <svg viewBox="0 0 500 700" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="trendGrad" x1="0" y1="700" x2="500" y2="0">
+            <stop offset="0%" stop-color="#16308f"/>
+            <stop offset="55%" stop-color="#17c9b8"/>
+            <stop offset="100%" stop-color="#5eead4"/>
+          </linearGradient>
+        </defs>
+        <path class="trend-path" d="M40 620 L160 320 L230 470 L320 220 L390 340 L470 90" />
+        <path class="trend-path" style="animation-delay:.3s" d="M470 90 L400 130 M470 90 L440 190" />
+        <g class="trend-tip">
+          <circle cx="470" cy="90" r="9" fill="#5eead4"/>
+          <circle cx="470" cy="90" r="16" fill="none" stroke="#5eead4" stroke-width="2" opacity="0.5"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section id="categorias">
+    <div class="section-head">
+      <span class="tag">De qué hablamos</span>
+      <h2>Todo lo relevante, sin relleno.</h2>
+      <p>Cada tema se cuenta por lo que realmente importa: el gancho, el dato curioso, la reacción.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card"><span class="num">01</span><h3>Última hora</h3><p>Lo que está pasando ahora mismo y por qué debería importarte.</p></div>
+      <div class="cat-card"><span class="num">02</span><h3>Cultura pop</h3><p>Series, música, famosos y los momentos que todos están comentando.</p></div>
+      <div class="cat-card"><span class="num">03</span><h3>Tecnología</h3><p>Lanzamientos, tendencias digitales y lo próximo que vas a usar.</p></div>
+      <div class="cat-card"><span class="num">04</span><h3>Deportes</h3><p>Resultados, jugadas y los momentos que se vuelven virales.</p></div>
+      <div class="cat-card"><span class="num">05</span><h3>Cine y estrenos</h3><p>Qué se estrena, qué se viene y qué vale la pena ver.</p></div>
+      <div class="cat-card"><span class="num">06</span><h3>Curiosidades</h3><p>Fenómenos sorprendentes e historias que no vas a creer.</p></div>
+    </div>
+  </section>
+
+  <section id="hoy">
+    <div class="section-head">
+      <span class="tag">Formato</span>
+      <h2>Noticias del día, en un minuto.</h2>
+      <p>Cada mañana resumimos lo esencial: rápido, claro y visual — pensado para verse entero.</p>
+    </div>
+    <div class="cat-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+      <div class="cat-card"><h3>⚡ Rápido</h3><p>Sin relleno. Si se cuenta en 20 segundos, no dura 40.</p></div>
+      <div class="cat-card"><h3>🎯 Directo</h3><p>Un gancho, un ángulo, la parte que de verdad importa.</p></div>
+      <div class="cat-card"><h3>📱 Visual</h3><p>Hecho para TikTok, Reels y Shorts — vertical, 9:16.</p></div>
+    </div>
+  </section>
+
+  <section id="redes">
+    <div class="social-strip">
+      <div class="social-head">
+        <h2>Síguenos donde ya estás.</h2>
+        <p>Contenido nuevo cada día en las cuatro plataformas.</p>
+      </div>
+      <div class="social-grid">
+        <a class="social-card" href="#" aria-label="TikTok NuntiaMX">
+          <span class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-4.28-4.28h-3.4v14.2a2.6 2.6 0 1 1-1.84-2.49v-3.44a5.99 5.99 0 1 0 5.24 5.94V9.4a7.65 7.65 0 0 0 4.28 1.3V7.3a4.27 4.27 0 0 1 0-1.48z"/></svg></span>
+          <span><span class="s-name">TikTok</span><br><span class="s-sub">@nuntiamx</span></span>
+        </a>
+        <a class="social-card" href="#" aria-label="Instagram NuntiaMX">
+          <span class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></span>
+          <span><span class="s-name">Instagram</span><br><span class="s-sub">@nuntiamx</span></span>
+        </a>
+        <a class="social-card" href="#" aria-label="Facebook NuntiaMX">
+          <span class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"/></svg></span>
+          <span><span class="s-name">Facebook</span><br><span class="s-sub">Nuntia MX</span></span>
+        </a>
+        <a class="social-card" href="#" aria-label="YouTube NuntiaMX">
+          <span class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.4-.4-5a2.8 2.8 0 0 0-2-2C17.9 4.5 12 4.5 12 4.5s-5.9 0-7.6.5a2.8 2.8 0 0 0-2 2C2 8.6 2 12 2 12s0 3.4.4 5a2.8 2.8 0 0 0 2 2c1.7.5 7.6.5 7.6.5s5.9 0 7.6-.5a2.8 2.8 0 0 0 2-2c.4-1.6.4-5 .4-5zM10 15.5v-7l6 3.5-6 3.5z"/></svg></span>
+          <span><span class="s-name">YouTube</span><br><span class="s-sub">NuntiaMX</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contacto">
+  <div class="f-left">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M8 78 L30 40 L45 62 L62 30 L74 46 L92 14" stroke="#17c9b8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    © 2026 NuntiaMX — Actualidad y tendencias digitales.
+  </div>
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#categorias">Categorías</a>
+    <a href="#redes">Redes</a>
+  </nav>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const drawer = document.getElementById('drawer');
+  const scrim = document.getElementById('scrim');
+  const drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    scrim.classList.add('show');
+    menuBtn.classList.add('open');
+    menuBtn.setAttribute('aria-expanded','true');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    scrim.classList.remove('show');
+    menuBtn.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded','false');
+  }
+  menuBtn.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  drawerClose.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+</script>
+
+</body>
+</html>
