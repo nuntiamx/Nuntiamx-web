@@ -271,8 +271,9 @@
     transition:transform .8s ease;
   }
   .art-card:hover .art-thumb::after{transform:translateX(120%);}
-  .art-thumb span{font-size:2.1rem; filter:drop-shadow(0 4px 10px rgba(0,0,0,.25)); transition:transform .35s ease;}
-  .art-card:hover .art-thumb span{transform:scale(1.12) rotate(-4deg);}
+  .art-thumb img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
+  .art-thumb span.emoji{font-size:2.1rem; filter:drop-shadow(0 4px 10px rgba(0,0,0,.25)); transition:transform .35s ease; position:relative; z-index:1;}
+  .art-card:hover .art-thumb span.emoji{transform:scale(1.12) rotate(-4deg);}
   .art-badge{
     position:absolute; top:12px; left:12px; font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     background:rgba(7,12,36,.65); border:1px solid rgba(238,244,251,.18); color:var(--teal-light);
@@ -509,7 +510,10 @@
     artGrid.innerHTML = ordenados.slice(0, 6).map(a => `
       <article class="art-card">
         <a href="articulo.html?a=${encodeURIComponent(a.slug)}" style="display:block;">
-          <div class="art-thumb"><span class="art-badge">${a.categoria}</span><span>${a.icono}</span></div>
+          <div class="art-thumb">
+            <span class="art-badge">${a.categoria}</span>
+            ${a.imagen ? `<img src="${a.imagen}" alt="${a.titulo}" loading="lazy">` : `<span class="emoji">${a.icono}</span>`}
+          </div>
           <div class="art-body">
             <div class="art-meta">${fechaLegible(a.fecha)} · ${a.categoria}</div>
             <h3>${a.titulo}</h3>

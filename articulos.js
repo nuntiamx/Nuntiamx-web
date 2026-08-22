@@ -17,10 +17,22 @@
   slug      -> identificador único para la URL (ej: "volcan-colima")
   titulo    -> título del artículo
   categoria -> "Última hora" | "Tecnología" | "Cultura pop" | "Deportes" | "Cine y estrenos" | "Curiosidades"
-  icono     -> un emoji que represente el tema
+  icono     -> un emoji (se usa SOLO si no subes imagen, como respaldo)
+  imagen    -> (opcional) ruta a tu imagen, ej: "img/claudia-wells.jpg"
+               Si la pones, se usa la imagen en vez del emoji.
+               Si la dejas fuera (o la borras), se ve el emoji como antes.
   fecha     -> formato "AAAA-MM-DD" (el más reciente se muestra primero)
   resumen   -> 1-2 frases cortas, se ven en la tarjeta
   contenido -> arreglo de párrafos, cada uno entre comillas y separado por coma
+
+  CÓMO SUBIR UNA IMAGEN:
+  1. En GitHub, dentro de tu repositorio, crea una carpeta llamada "img"
+     (Add file > Create new file > escribe "img/nombre-de-tu-imagen.jpg"
+     como nombre, eso crea la carpeta sola).
+  2. O más fácil: entra a la carpeta del repo, dale "Add file" > "Upload files",
+     sube tu imagen, y asegúrate de que quede dentro de una carpeta "img".
+  3. En este archivo, agrega la línea imagen: "img/nombre-de-tu-imagen.jpg"
+     dentro del artículo correspondiente (usa el nombre EXACTO del archivo que subiste).
   ============================================================
 */
 
@@ -30,6 +42,7 @@ const ARTICULOS = [
     titulo: "Jennifer Parker vuelve al mall donde nació 'Volver al Futuro'",
     categoria: "Cultura pop",
     icono: "🚗",
+    imagen: "img/claudia-wells-twin-pines.jpg",
     fecha: "2026-08-22",
     resumen: "Claudia Wells confirmó su presencia en el encuentro de fans en Puente Hills Mall — la locación real de la película, que podría desaparecer pronto.",
     contenido: [
