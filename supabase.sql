@@ -1,0 +1,11 @@
+create extension if not exists pgcrypto;
+create table if not exists public.posts(id uuid primary key default gen_random_uuid(),slug text unique not null,title text not null,category text not null default 'Última hora',summary text not null default '',content jsonb not null default '[]'::jsonb,image_url text,youtube_id text,published boolean not null default true,featured boolean not null default false,views bigint not null default 0,likes bigint not null default 0,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
+create index if not exists posts_feed on public.posts(published,created_at desc);
+alter table public.posts enable row level security;
+drop policy if exists public_read on public.posts; create policy public_read on public.posts for select using(published=true or auth.jwt()->>'email'='YOUR_ADMIN_EMAIL');
+drop policy if exists admin_insert on public.posts; create policy admin_insert on public.posts for insert with check(auth.jwt()->>'email'='YOUR_ADMIN_EMAIL');
+drop policy if exists admin_update on public.posts; create policy admin_update on public.posts for update using(auth.jwt()->>'email'='YOUR_ADMIN_EMAIL') with check(auth.jwt()->>'email'='YOUR_ADMIN_EMAIL');
+drop policy if exists admin_delete on public.posts; create policy admin_delete on public.posts for delete using(auth.jwt()->>'email'='YOUR_ADMIN_EMAIL');
+create or replace function public.increment_post_view(post_id uuid) returns void language sql security definer set search_path=public as $$ update posts set views=views+1 where id=post_id and published=true; $$;
+create or replace function public.increment_post_like(post_id uuid) returns bigint language plpgsql security definer set search_path=public as $$ declare n bigint; begin update posts set likes=likes+1 where id=post_id and published=true returning likes into n; return coalesce(n,0); end; $$;
+grant execute on function public.increment_post_view(uuid) to anon,authenticated; grant execute on function public.increment_post_like(uuid) to anon,authenticated;
